@@ -2,6 +2,7 @@
 	"name": "bundler",
 	"displayName": "bundler",
 	"description": "Support for viewing and opening Ruby Bundler dependencies",
+	"publisher": "mbreit",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.45.0"
