@@ -1,65 +1,47 @@
-# bundler README
+# VS Code extension for Bundler
 
-This is the README for your extension "bundler". After writing up a brief description, we recommend including the following sections.
+This extension is in early development. Most of the planned features are not
+implemented yet. If you encounter any bug, please report them in our [GitHub
+repository](https://github.com/mbreit/vscode-bundler).
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Already implemented features:
 
-For example if there is an image subfolder under your extension project workspace:
+* None
 
-\!\[feature X\]\(images/feature-x.png\)
+Planned features are:
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+* Providing the most used Bundler commands as VS Code commands in the VS Code
+  Command Palette and provide QuickPick inputs for arguments
+* Adding a tree view to the Side Bar showing all Gemfiles in your workspace
+  with their resolved dependencies, their version and their dependencies and
+  some useful actions like opening the Gem in a new window or add it to the
+  current workspace
+* Showing useful Gem information, links and actions in the Gemfile with a Code
+  Lens and/or hover provider
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+You must have Ruby and Bundler installed and in your `PATH` or set their
+paths in the extension settings.
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
 This extension contributes the following settings:
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+* None
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+See <https://github.com/mbreit/vscode-bundler/issues> for known issues.
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+See [CHANGELOG.md](./CHANGELOG.md) for release notes.
 
-### 1.0.0
+## Contributing
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+* <https://www.conventionalcommits.org/en/v1.0.0/>
 
 **Enjoy!**
