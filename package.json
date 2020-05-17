@@ -11,16 +11,31 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:bundler.helloWorld"
+		"onCommand:bundler.bundleInstall",
+		"onCommand:bundler.bundleOutdated"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "bundler.helloWorld",
-				"title": "Hello World"
+				"command": "bundler.bundleInstall",
+				"title": "Bundle install"
+			},
+			{
+				"command": "bundler.bundleOutdated",
+				"title": "Bundle outdated"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Bundler",
+			"properties": {
+				"bundler.bundlerPath": {
+					"type": "string",
+					"default": "bundle",
+					"description": "Path to Bundler executable"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

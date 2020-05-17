@@ -8,7 +8,7 @@ repository](https://github.com/mbreit/vscode-bundler).
 
 Already implemented features:
 
-* None
+* Commands for `bundle install` and `bundle outdated`
 
 Planned features are:
 
@@ -30,7 +30,7 @@ paths in the extension settings.
 
 This extension contributes the following settings:
 
-* None
+* `bundler.bundlerPath`: path to the Bundler executable, defaults to `bundle`
 
 ## Known Issues
 
