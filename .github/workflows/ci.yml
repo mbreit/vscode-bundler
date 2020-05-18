@@ -21,3 +21,29 @@ jobs:
         uses: GabrielBB/xvfb-action@v1.0
         with:
           run: npm test
+
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install dependencies
+        run: npm install
+      - name: Set prerelease version
+        run: npm version prerelease --preid=gh$GITHUB_RUN_NUMBER --no-git-tag-version
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@master
+      - name: Vscode release plugin
+        uses: JCofman/vscodeaction@master
+        with:
+          args: package 
+      - name: Upload packaged extension to Github artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: vscode-bundler-${{ steps.package-version.outputs.current-version }}
+          path: bundler-*.vsix
