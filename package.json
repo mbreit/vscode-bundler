@@ -14,7 +14,8 @@
 	"repository": "https://github.com/mbreit/vscode-bundler",
 	"activationEvents": [
 		"onCommand:bundler.bundleInstall",
-		"onCommand:bundler.bundleOutdated"
+		"onCommand:bundler.bundleOutdated",
+		"onCommand:bundler.bundleOpen"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -26,6 +27,10 @@
 			{
 				"command": "bundler.bundleOutdated",
 				"title": "Bundle outdated"
+			},
+			{
+				"command": "bundler.bundleOpen",
+				"title": "Bundle open"
 			}
 		],
 		"configuration": {

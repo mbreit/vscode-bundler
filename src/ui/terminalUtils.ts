@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 // Shared terminal for bundler commands
 let terminal: vscode.Terminal | undefined;
 
-function runInTerminal(command: string): void {
+export function runInTerminal(command: string): void {
   terminal = terminal ?? vscode.window.createTerminal('bundler');
   terminal.sendText(command);
   terminal.show();

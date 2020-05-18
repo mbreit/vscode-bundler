@@ -8,7 +8,7 @@ repository](https://github.com/mbreit/vscode-bundler).
 
 Already implemented features:
 
-* Commands for `bundle install` and `bundle outdated`
+* Commands for `bundle install`, `bundle outdated`, and `bundle open`
 
 Planned features are:
 
