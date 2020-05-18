@@ -11,6 +11,7 @@
 	"categories": [
 		"Other"
 	],
+	"repository": "https://github.com/mbreit/vscode-bundler",
 	"activationEvents": [
 		"onCommand:bundler.bundleInstall",
 		"onCommand:bundler.bundleOutdated"
