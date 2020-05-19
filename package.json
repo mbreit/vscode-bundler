@@ -14,7 +14,8 @@
 	"repository": "https://github.com/mbreit/vscode-bundler",
 	"activationEvents": [
 		"onCommand:bundler.bundleInstall",
-		"onCommand:bundler.bundleOutdated"
+		"onCommand:bundler.bundleOutdated",
+		"workspaceContains:**/Gemfile"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
