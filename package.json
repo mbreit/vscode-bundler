@@ -29,6 +29,14 @@
 				"title": "Bundle outdated"
 			}
 		],
+		"views": {
+			"explorer": [
+				{
+					"id": "bundler.bundlerDependencies",
+					"name": "Bundler Dependencies"
+				}
+			]
+		},
 		"configuration": {
 			"title": "Bundler",
 			"properties": {

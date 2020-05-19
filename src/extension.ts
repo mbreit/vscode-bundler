@@ -3,16 +3,14 @@
 import * as vscode from 'vscode';
 import { BundlerProvider } from './bundler/bundlerProvider';
 import { registerTerminalCommand } from './ui/terminalUtils';
+import { createDependencyTreeview } from './ui/dependencyTreeView';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext): void {
   const config = vscode.workspace.getConfiguration('bundler');
   const bundlerPath = config.get('bundlerPath');
-  const bundlerProvider = new BundlerProvider(context, (definitions) => {
-    // TODO: Update treeview and check for errors
-    definitions.forEach((def, uri) => console.log(uri, def));
-  });
+  const bundlerProvider = new BundlerProvider(context);
 
   registerTerminalCommand(
     context,
@@ -24,6 +22,9 @@ export function activate(context: vscode.ExtensionContext): void {
     'bundler.bundleOutdated',
     `${bundlerPath} outdated`,
   );
+
+  const treeView = createDependencyTreeview(bundlerProvider);
+  context.subscriptions.push(treeView);
 
   bundlerProvider.init();
 }

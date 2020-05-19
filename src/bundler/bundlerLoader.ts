@@ -13,6 +13,7 @@ export interface BundlerSpec {
 
 export interface BundlerDependency {
   name: string;
+  requirement: string;
 }
 
 export interface BundlerDefinition {
