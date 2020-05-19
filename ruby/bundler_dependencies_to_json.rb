@@ -31,7 +31,7 @@ begin
       version: spec.version,
       homepage: spec.homepage,
       path: spec.full_gem_path,
-      dependencies: spec.dependencies.map do |dependency|
+      dependencies: spec.dependencies.select(&:runtime?).map do |dependency|
         dependency_to_json(dependency)
       end
     }
