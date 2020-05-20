@@ -52,15 +52,19 @@ export class BundlerProvider {
   }
 
   private async findGemfile(gemfileOrLockfile: vscode.Uri): Promise<vscode.Uri | undefined> {
-    const gemfilePath = gemfileOrLockfile.with({
-      path: path.join(path.dirname(gemfileOrLockfile.path), 'Gemfile'),
-    });
+    const gemfilePath = this.gemfilePath(gemfileOrLockfile);
     try {
       await vscode.workspace.fs.stat(gemfilePath);
       return gemfilePath;
     } catch {
       return undefined;
     }
+  }
+
+  private gemfilePath(gemfileOrLockfile: vscode.Uri): vscode.Uri {
+    return gemfileOrLockfile.with({
+      path: path.join(path.dirname(gemfileOrLockfile.path), 'Gemfile'),
+    });
   }
 
   private async loadFile(gemfileOrLockfile: vscode.Uri): Promise<void> {
@@ -78,10 +82,7 @@ export class BundlerProvider {
   }
 
   private async removeFile(gemfileOrLockfile: vscode.Uri): Promise<void> {
-    const gemfile = await this.findGemfile(gemfileOrLockfile);
-    if (gemfile === undefined) {
-      return;
-    }
+    const gemfile = this.gemfilePath(gemfileOrLockfile);
 
     this.bundlerDefinitions.delete(gemfile.toString());
     this.notifyOnUpdate();
