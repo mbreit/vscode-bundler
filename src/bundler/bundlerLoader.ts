@@ -42,6 +42,7 @@ export class BundlerLoader {
             this.logStderr(scriptPath, cwd, stderr);
           }
           if (err) {
+            this.logErr(scriptPath, cwd, err);
             reject(err);
           } else {
             resolve(stdout);
@@ -51,9 +52,19 @@ export class BundlerLoader {
     });
   }
 
+  private logErr(scriptPath: string, cwd: string, err: childProcess.ExecException): void {
+    const outputChannel = this.getOutputChannel();
+    outputChannel.appendLine(
+      `Error running ruby process "${this.rubyExecutable()} ${scriptPath}" inside ${cwd}:`,
+    );
+    outputChannel.appendLine(err.message);
+  }
+
   private logStderr(scriptPath: string, cwd: string, stderr: string): void {
     const outputChannel = this.getOutputChannel();
-    outputChannel.appendLine(`STDERR from ruby process "${scriptPath}" inside ${cwd}:`);
+    outputChannel.appendLine(
+      `STDERR from ruby process "${this.rubyExecutable()} ${scriptPath}" inside ${cwd}:`,
+    );
     outputChannel.appendLine(stderr);
   }
 
