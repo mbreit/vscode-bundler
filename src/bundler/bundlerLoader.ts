@@ -31,14 +31,19 @@ export class BundlerLoader {
   private executeRubyScript(script: string, cwd: string): Promise<string> {
     const scriptPath = this.context.asAbsolutePath(path.join('ruby', script));
     return new Promise((resolve, reject) => {
-      childProcess.execFile(this.rubyExecutable(), [scriptPath], { cwd }, (err, stdout, _stderr) => {
-        // TODO: display stderr somewhere
-        if (err) {
-          reject(err);
-        } else {
-          resolve(stdout);
-        }
-      });
+      childProcess.execFile(
+        this.rubyExecutable(),
+        [scriptPath],
+        { cwd },
+        (err, stdout, _stderr) => {
+          // TODO: display stderr somewhere
+          if (err) {
+            reject(err);
+          } else {
+            resolve(stdout);
+          }
+        },
+      );
     });
   }
 
