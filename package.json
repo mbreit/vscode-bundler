@@ -1,6 +1,6 @@
 {
 	"name": "bundler",
-	"displayName": "bundler",
+	"displayName": "Bundler",
 	"description": "Support for viewing and opening Ruby Bundler dependencies",
 	"publisher": "mbreit",
 	"private": true,
