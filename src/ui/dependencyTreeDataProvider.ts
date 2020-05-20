@@ -18,41 +18,15 @@ export class DependencyTreeDataProvider implements vscode.TreeDataProvider<Depen
 
   getTreeItem([definition, dependency]: DependencyTreeElement): vscode.TreeItem {
     if (dependency === undefined) {
-      const treeItem = new vscode.TreeItem(
-        'Gemfile',
-        vscode.TreeItemCollapsibleState.Collapsed,
-      );
-      treeItem.description = this.getPathLabel(definition);
-      return treeItem;
+      return this.gemfileTreeItem(definition);
     }
 
     const spec = this.getSpec(definition, dependency);
     if (spec) {
-      const treeItem = new vscode.TreeItem(
-        spec.name,
-        spec.dependencies.length !== 0
-          ? vscode.TreeItemCollapsibleState.Collapsed
-          : vscode.TreeItemCollapsibleState.None,
-      );
-      treeItem.description = spec.version;
-      return treeItem;
+      return this.resolvedGemTreeItem(spec);
     }
 
-    const treeItem = new vscode.TreeItem(
-      dependency.name,
-      vscode.TreeItemCollapsibleState.None,
-    );
-    treeItem.description = dependency.requirement;
-    return treeItem;
-  }
-
-  private getPathLabel(definition: BundlerDefinition): string | boolean | undefined {
-    const definitionPath = definition.path;
-    const folders = vscode.workspace.workspaceFolders?.map((folder) => folder.uri.fsPath) ?? [];
-    if (folders.includes(definitionPath)) {
-      return path.basename(definitionPath);
-    }
-    return vscode.workspace.asRelativePath(vscode.Uri.parse(definition.path));
+    return this.unresolvedGemTreeItem(dependency);
   }
 
   getChildren(element?: DependencyTreeElement): vscode.ProviderResult<DependencyTreeElement[]> {
@@ -76,6 +50,39 @@ export class DependencyTreeDataProvider implements vscode.TreeDataProvider<Depen
     }
 
     return [];
+  }
+
+  private unresolvedGemTreeItem(dependency: BundlerDependency): vscode.TreeItem {
+    const treeItem = new vscode.TreeItem(dependency.name, vscode.TreeItemCollapsibleState.None);
+    treeItem.description = dependency.requirement;
+    treeItem.iconPath = new vscode.ThemeIcon('question');
+    return treeItem;
+  }
+
+  private resolvedGemTreeItem(spec: BundlerSpec): vscode.TreeItem {
+    const treeItem = new vscode.TreeItem(spec.name, spec.dependencies.length !== 0
+      ? vscode.TreeItemCollapsibleState.Collapsed
+      : vscode.TreeItemCollapsibleState.None);
+    treeItem.description = spec.version;
+    treeItem.iconPath = new vscode.ThemeIcon('package');
+    return treeItem;
+  }
+
+  private gemfileTreeItem(definition: BundlerDefinition): vscode.TreeItem {
+    const gemfilePath = path.join(definition.path, 'Gemfile');
+    const treeItem = new vscode.TreeItem(
+      vscode.Uri.parse(gemfilePath),
+      vscode.TreeItemCollapsibleState.Collapsed,
+    );
+    treeItem.label = path.basename(definition.path);
+    treeItem.tooltip = gemfilePath;
+    treeItem.iconPath = vscode.ThemeIcon.File;
+    if (definition.errorMessage) {
+      treeItem.label += ' ⚠';
+      treeItem.tooltip += '\n\n';
+      treeItem.tooltip += definition.errorMessage;
+    }
+    return treeItem;
   }
 
   private dependenciesToTreeElements(
