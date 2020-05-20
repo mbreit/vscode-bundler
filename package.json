@@ -15,6 +15,7 @@
 	"activationEvents": [
 		"onCommand:bundler.bundleInstall",
 		"onCommand:bundler.bundleOutdated",
+		"onCommand:bundler.reloadDependencies",
 		"workspaceContains:**/Gemfile"
 	],
 	"main": "./out/extension.js",
