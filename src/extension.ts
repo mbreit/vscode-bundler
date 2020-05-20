@@ -23,6 +23,12 @@ export function activate(context: vscode.ExtensionContext): void {
     `${bundlerPath} outdated`,
   );
 
+  const reloadCommand = vscode.commands.registerCommand(
+    'bundler.reloadDependencies',
+    () => bundlerProvider.reload(),
+  );
+  context.subscriptions.push(reloadCommand);
+
   const treeView = createDependencyTreeview(bundlerProvider);
   context.subscriptions.push(treeView);
 

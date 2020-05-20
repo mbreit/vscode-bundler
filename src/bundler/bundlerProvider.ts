@@ -42,6 +42,11 @@ export class BundlerProvider {
     watcher.onDidDelete((gemfileOrLockfile) => this.removeFile(gemfileOrLockfile));
   }
 
+  public reload(): void {
+    this.bundlerDefinitions = new Map();
+    this.loadAllGemfiles();
+  }
+
   public getDefinitions(): Map<string, BundlerDefinition> {
     return this.bundlerDefinitions;
   }

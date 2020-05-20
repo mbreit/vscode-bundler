@@ -27,6 +27,11 @@
 			{
 				"command": "bundler.bundleOutdated",
 				"title": "Bundle outdated"
+			},
+			{
+				"command": "bundler.reloadDependencies",
+				"title": "Reload Bundler dependencies",
+				"icon": "$(refresh)"
 			}
 		],
 		"views": {
@@ -34,6 +39,15 @@
 				{
 					"id": "bundler.bundlerDependencies",
 					"name": "Bundler Dependencies"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "bundler.reloadDependencies",
+					"when": "view == bundler.bundlerDependencies",
+					"group": "navigation"
 				}
 			]
 		},
