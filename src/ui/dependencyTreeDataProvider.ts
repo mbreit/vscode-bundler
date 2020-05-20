@@ -72,7 +72,7 @@ export class DependencyTreeDataProvider implements vscode.TreeDataProvider<Depen
     const gemfilePath = path.join(definition.path, 'Gemfile');
     const treeItem = new vscode.TreeItem(
       vscode.Uri.parse(gemfilePath),
-      vscode.TreeItemCollapsibleState.Collapsed,
+      vscode.TreeItemCollapsibleState.Expanded,
     );
     treeItem.label = path.basename(definition.path);
     treeItem.tooltip = gemfilePath;
