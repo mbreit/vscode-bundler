@@ -29,7 +29,7 @@ export class BundlerProvider {
   }
 
   private async loadAllGemfiles(): Promise<void> {
-    const gemfiles = await vscode.workspace.findFiles('Gemfile');
+    const gemfiles = await vscode.workspace.findFiles('**/Gemfile');
     gemfiles.forEach((gemfile) => this.loadFile(gemfile));
   }
 
