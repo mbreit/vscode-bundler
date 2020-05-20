@@ -24,33 +24,54 @@ export class BundlerProvider {
   }
 
   public async init(): Promise<void> {
-    const watcher = vscode.workspace.createFileSystemWatcher('**/Gemfile}');
-    // TODO: watch Gemfile.lock changes
-    watcher.onDidChange((gemFile) => this.loadFile(gemFile));
-    watcher.onDidCreate((gemFile) => this.loadFile(gemFile));
-    watcher.onDidDelete((gemFile) => this.removeFile(gemFile));
+    const watcher = vscode.workspace.createFileSystemWatcher('**/{Gemfile,Gemfile.lock}');
+    watcher.onDidChange((gemfileOrLockfile) => this.loadFile(gemfileOrLockfile));
+    watcher.onDidCreate((gemfileOrLockfile) => this.loadFile(gemfileOrLockfile));
+    watcher.onDidDelete((gemfileOrLockfile) => this.removeFile(gemfileOrLockfile));
 
     this.context.subscriptions.push(watcher);
 
-    const gemFiles = await vscode.workspace.findFiles('Gemfile');
-    gemFiles.forEach((gemFile) => this.loadFile(gemFile));
+    const gemfiles = await vscode.workspace.findFiles('Gemfile');
+    gemfiles.forEach((gemfile) => this.loadFile(gemfile));
   }
 
   public getDefinitions(): Map<string, BundlerDefinition> {
     return this.bundlerDefinitions;
   }
 
-  private async loadFile(gemFile: vscode.Uri): Promise<void> {
-    const dir = gemFile.with({
-      path: path.dirname(gemFile.path),
+  private async findGemfile(gemfileOrLockfile: vscode.Uri): Promise<vscode.Uri | undefined> {
+    const gemfilePath = gemfileOrLockfile.with({
+      path: path.join(path.dirname(gemfileOrLockfile.path), 'Gemfile'),
+    });
+    try {
+      await vscode.workspace.fs.stat(gemfilePath);
+      return gemfilePath;
+    } catch {
+      return undefined;
+    }
+  }
+
+  private async loadFile(gemfileOrLockfile: vscode.Uri): Promise<void> {
+    const gemfile = await this.findGemfile(gemfileOrLockfile);
+    if (gemfile === undefined) {
+      return;
+    }
+
+    const dir = gemfile.with({
+      path: path.dirname(gemfile.path),
     });
     const definition = await this.bundlerLoader.loadDefinition(dir);
-    this.bundlerDefinitions.set(gemFile.toString(), definition);
+    this.bundlerDefinitions.set(gemfile.toString(), definition);
     this.notifyOnUpdate();
   }
 
-  private removeFile(gemFile: vscode.Uri): void {
-    this.bundlerDefinitions.delete(gemFile.toString());
+  private async removeFile(gemfileOrLockfile: vscode.Uri): Promise<void> {
+    const gemfile = await this.findGemfile(gemfileOrLockfile);
+    if (gemfile === undefined) {
+      return;
+    }
+
+    this.bundlerDefinitions.delete(gemfile.toString());
     this.notifyOnUpdate();
   }
 
