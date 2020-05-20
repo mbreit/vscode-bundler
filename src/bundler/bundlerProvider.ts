@@ -24,15 +24,22 @@ export class BundlerProvider {
   }
 
   public async init(): Promise<void> {
+    this.setupFileSystemWatcher();
+    await this.loadAllGemfiles();
+  }
+
+  private async loadAllGemfiles(): Promise<void> {
+    const gemfiles = await vscode.workspace.findFiles('Gemfile');
+    gemfiles.forEach((gemfile) => this.loadFile(gemfile));
+  }
+
+  private setupFileSystemWatcher(): void {
     const watcher = vscode.workspace.createFileSystemWatcher('**/{Gemfile,Gemfile.lock}');
+    this.context.subscriptions.push(watcher);
+
     watcher.onDidChange((gemfileOrLockfile) => this.loadFile(gemfileOrLockfile));
     watcher.onDidCreate((gemfileOrLockfile) => this.loadFile(gemfileOrLockfile));
     watcher.onDidDelete((gemfileOrLockfile) => this.removeFile(gemfileOrLockfile));
-
-    this.context.subscriptions.push(watcher);
-
-    const gemfiles = await vscode.workspace.findFiles('Gemfile');
-    gemfiles.forEach((gemfile) => this.loadFile(gemfile));
   }
 
   public getDefinitions(): Map<string, BundlerDefinition> {
