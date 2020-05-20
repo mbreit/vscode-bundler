@@ -9,7 +9,9 @@ repository](https://github.com/mbreit/vscode-bundler).
 Already implemented features:
 
 * Commands for `bundle install` and `bundle outdated`
-* Tree view for Bundler dependencies
+* Tree view for Bundler dependencies:
+
+![Tree View Demo](docs/images/dependency-tree.gif)
 
 Planned features are:
 
