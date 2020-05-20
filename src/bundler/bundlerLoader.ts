@@ -31,7 +31,7 @@ export class BundlerLoader {
   private executeRubyScript(script: string, cwd: string): Promise<string> {
     const scriptPath = this.context.asAbsolutePath(path.join('ruby', script));
     return new Promise((resolve, reject) => {
-      childProcess.execFile('ruby', [scriptPath], { cwd }, (err, stdout, _stderr) => {
+      childProcess.execFile(this.rubyExecutable(), [scriptPath], { cwd }, (err, stdout, _stderr) => {
         // TODO: display stderr somewhere
         if (err) {
           reject(err);
@@ -40,6 +40,10 @@ export class BundlerLoader {
         }
       });
     });
+  }
+
+  private rubyExecutable(): string {
+    return vscode.workspace.getConfiguration('bundler').get('rubyPath') || 'ruby';
   }
 
   async loadDefinition(uri: vscode.Uri): Promise<BundlerDefinition> {

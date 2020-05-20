@@ -59,6 +59,11 @@
 					"type": "string",
 					"default": "bundle",
 					"description": "Path to Bundler executable"
+				},
+				"bundler.rubyPath": {
+					"type": "string",
+					"default": "ruby",
+					"description": "Path to ruby executable"
 				}
 			}
 		}
