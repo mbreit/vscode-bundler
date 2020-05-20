@@ -9,5 +9,7 @@
     // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
     "typescript.tsc.autoDetect": "off",
     // Always use npm instead of yarn in this project
-    "npm.packageManager": "npm"
+    "npm.packageManager": "npm",
+    // We use a maximum line length of 100 characters
+    "editor.rulers": [100]
 }
