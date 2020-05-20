@@ -26,6 +26,8 @@ export interface BundlerDefinition {
 }
 
 export class BundlerLoader {
+  private outputChannel: vscode.OutputChannel | undefined;
+
   constructor(private context: vscode.ExtensionContext) { }
 
   private executeRubyScript(script: string, cwd: string): Promise<string> {
@@ -35,8 +37,10 @@ export class BundlerLoader {
         this.rubyExecutable(),
         [scriptPath],
         { cwd },
-        (err, stdout, _stderr) => {
-          // TODO: display stderr somewhere
+        (err, stdout, stderr) => {
+          if (stderr.length > 0) {
+            this.logStderr(scriptPath, cwd, stderr);
+          }
           if (err) {
             reject(err);
           } else {
@@ -45,6 +49,17 @@ export class BundlerLoader {
         },
       );
     });
+  }
+
+  private logStderr(scriptPath: string, cwd: string, stderr: string): void {
+    const outputChannel = this.getOutputChannel();
+    outputChannel.appendLine(`STDERR from ruby process "${scriptPath}" inside ${cwd}:`);
+    outputChannel.appendLine(stderr);
+  }
+
+  private getOutputChannel(): vscode.OutputChannel {
+    this.outputChannel = this.outputChannel ?? vscode.window.createOutputChannel('Bundler');
+    return this.outputChannel;
   }
 
   private rubyExecutable(): string {
