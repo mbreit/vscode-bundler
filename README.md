@@ -9,6 +9,9 @@ repository](https://github.com/mbreit/vscode-bundler).
 Already implemented features:
 
 * Commands for `bundle install` and `bundle outdated`
+* Tree view for Bundler dependencies:
+
+![Tree View Demo](docs/images/dependency-tree.gif)
 
 Planned features are:
 
@@ -31,6 +34,7 @@ paths in the extension settings.
 This extension contributes the following settings:
 
 * `bundler.bundlerPath`: path to the Bundler executable, defaults to `bundle`
+* `bundler.rubyPath`: path to the ruby executable, defaults to `ruby`
 
 ## Known Issues
 
