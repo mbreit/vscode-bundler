@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { BundlerTreeDataProvider, BundlerTreeElement } from './bundlerTreeDataProvider';
-import { BundlerProvider } from '../../bundler/bundlerProvider';
+import { BundlerProvider } from '../bundler/bundlerProvider';
 
 export function createBundlerTreeview(
   bundlerProvider: BundlerProvider,
