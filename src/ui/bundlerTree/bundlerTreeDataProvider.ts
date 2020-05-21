@@ -24,7 +24,7 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
       return this.gemfileTreeItem(treeElement.definition);
     }
 
-    const spec = this.getSpec(treeElement);
+    const spec = treeElement.getSpec();
     if (spec) {
       return this.resolvedGemTreeItem(spec);
     }
@@ -38,23 +38,9 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
       return [...definitions].map((definition) => new DefinitionTreeElement(definition));
     }
 
-    if (treeElement instanceof DependencyTreeElement) {
-      const spec = this.getSpec(treeElement);
-
-      if (spec && spec.dependencies) {
-        return this.dependenciesToTreeElements(treeElement.definition, spec.dependencies);
-      }
-      return [];
-    }
-
-    if (treeElement.definition.dependencies) {
-      return this.dependenciesToTreeElements(
-        treeElement.definition,
-        treeElement.definition.dependencies,
-      );
-    }
-
-    return [];
+    return treeElement.getDependencies().map(
+      (dependency) => new DependencyTreeElement(treeElement.definition, dependency),
+    );
   }
 
   private unresolvedGemTreeItem(dependency: BundlerDependency): vscode.TreeItem {
@@ -88,19 +74,5 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
       treeItem.tooltip += definition.errorMessage;
     }
     return treeItem;
-  }
-
-  private dependenciesToTreeElements(
-    definition: BundlerDefinition,
-    dependencies: Array<BundlerDependency>,
-  ): Array<BundlerTreeElement> {
-    return dependencies.map((dependency) => new DependencyTreeElement(definition, dependency));
-  }
-
-  private getSpec(treeElement: DependencyTreeElement): BundlerSpec | undefined {
-    if (treeElement.definition.specs === undefined) {
-      return undefined;
-    }
-    return treeElement.definition.specs.find((spec) => spec.name === treeElement.dependency.name);
   }
 }
