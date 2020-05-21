@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { BundlerProvider } from './bundler/bundlerProvider';
 import { registerTerminalCommand } from './ui/terminalUtils';
-import { createDependencyTreeview } from './ui/dependencyTreeView';
+import { createBundlerTreeview } from './ui/bundlerTree/bundlerTreeView';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
   context.subscriptions.push(reloadCommand);
 
-  const treeView = createDependencyTreeview(bundlerProvider);
+  const treeView = createBundlerTreeview(bundlerProvider);
   context.subscriptions.push(treeView);
 
   bundlerProvider.init();

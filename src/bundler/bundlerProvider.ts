@@ -28,9 +28,9 @@ export class BundlerProvider {
     await this.loadAllGemfiles();
   }
 
-  private async loadAllGemfiles(): Promise<void> {
+  private async loadAllGemfiles(): Promise<void[]> {
     const gemfiles = await vscode.workspace.findFiles('**/Gemfile');
-    gemfiles.forEach((gemfile) => this.loadFile(gemfile));
+    return Promise.all(gemfiles.map((gemfile) => this.loadFile(gemfile)));
   }
 
   private setupFileSystemWatcher(): void {
@@ -42,9 +42,9 @@ export class BundlerProvider {
     watcher.onDidDelete((gemfileOrLockfile) => this.removeFile(gemfileOrLockfile));
   }
 
-  public reload(): void {
-    this.bundlerDefinitions = new Map();
-    this.loadAllGemfiles();
+  public async reload(): Promise<void> {
+    this.bundlerDefinitions.clear();
+    await this.loadAllGemfiles();
   }
 
   public getDefinitions(): Map<string, BundlerDefinition> {
