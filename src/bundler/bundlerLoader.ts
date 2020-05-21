@@ -26,9 +26,11 @@ export interface BundlerDefinition {
 }
 
 export class BundlerLoader {
-  private outputChannel: vscode.OutputChannel | undefined;
+  private outputChannel: vscode.OutputChannel;
 
-  constructor(private context: vscode.ExtensionContext) { }
+  constructor(private context: vscode.ExtensionContext) {
+    this.outputChannel = vscode.window.createOutputChannel('Bundler');
+  }
 
   private executeRubyScript(script: string, cwd: string): Promise<string> {
     const scriptPath = this.context.asAbsolutePath(path.join('ruby', script));
@@ -53,24 +55,17 @@ export class BundlerLoader {
   }
 
   private logErr(scriptPath: string, cwd: string, err: childProcess.ExecException): void {
-    const outputChannel = this.getOutputChannel();
-    outputChannel.appendLine(
+    this.outputChannel.appendLine(
       `Error running ruby process "${this.rubyExecutable()} ${scriptPath}" inside ${cwd}:`,
     );
-    outputChannel.appendLine(err.message);
+    this.outputChannel.appendLine(err.message);
   }
 
   private logStderr(scriptPath: string, cwd: string, stderr: string): void {
-    const outputChannel = this.getOutputChannel();
-    outputChannel.appendLine(
+    this.outputChannel.appendLine(
       `STDERR from ruby process "${this.rubyExecutable()} ${scriptPath}" inside ${cwd}:`,
     );
-    outputChannel.appendLine(stderr);
-  }
-
-  private getOutputChannel(): vscode.OutputChannel {
-    this.outputChannel = this.outputChannel ?? vscode.window.createOutputChannel('Bundler');
-    return this.outputChannel;
+    this.outputChannel.appendLine(stderr);
   }
 
   private rubyExecutable(): string {
