@@ -21,15 +21,15 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
 
   getTreeItem(treeElement: BundlerTreeElement): vscode.TreeItem {
     if (treeElement instanceof DefinitionTreeElement) {
-      return this.gemfileTreeItem(treeElement.definition);
+      return this.definitionTreeItem(treeElement.definition);
     }
 
     const spec = treeElement.getSpec();
     if (spec) {
-      return this.resolvedGemTreeItem(spec);
+      return this.resolvedDependencyTreeItem(spec);
     }
 
-    return this.unresolvedGemTreeItem(treeElement.dependency);
+    return this.unresolvedDependencyTreeItem(treeElement.dependency);
   }
 
   getChildren(treeElement?: BundlerTreeElement): vscode.ProviderResult<BundlerTreeElement[]> {
@@ -43,14 +43,14 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
     );
   }
 
-  private unresolvedGemTreeItem(dependency: BundlerDependency): vscode.TreeItem {
+  private unresolvedDependencyTreeItem(dependency: BundlerDependency): vscode.TreeItem {
     const treeItem = new vscode.TreeItem(dependency.name, vscode.TreeItemCollapsibleState.None);
     treeItem.description = dependency.requirement;
     treeItem.iconPath = new vscode.ThemeIcon('question');
     return treeItem;
   }
 
-  private resolvedGemTreeItem(spec: BundlerSpec): vscode.TreeItem {
+  private resolvedDependencyTreeItem(spec: BundlerSpec): vscode.TreeItem {
     const treeItem = new vscode.TreeItem(spec.name, spec.dependencies.length !== 0
       ? vscode.TreeItemCollapsibleState.Collapsed
       : vscode.TreeItemCollapsibleState.None);
@@ -59,7 +59,7 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
     return treeItem;
   }
 
-  private gemfileTreeItem(definition: BundlerDefinition): vscode.TreeItem {
+  private definitionTreeItem(definition: BundlerDefinition): vscode.TreeItem {
     const gemfilePath = path.join(definition.path, 'Gemfile');
     const treeItem = new vscode.TreeItem(
       vscode.Uri.parse(gemfilePath),
