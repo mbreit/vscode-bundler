@@ -38,10 +38,8 @@ jobs:
       - name: get-npm-version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@master
-      - name: Vscode release plugin
-        uses: JCofman/vscodeaction@master
-        with:
-          args: package 
+      - name: Package extension
+        run: npm run package
       - name: Upload packaged extension to Github artifacts
         uses: actions/upload-artifact@v2
         with:
