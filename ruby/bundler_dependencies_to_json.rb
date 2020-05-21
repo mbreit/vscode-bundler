@@ -38,7 +38,7 @@ begin
   end
 rescue Bundler::Dsl::DSLError => e
   out.merge!(status: 'error', error: 'gemfileLoadError', message: e.message)
-rescue Bundler::GemNotFound => e
+rescue Bundler::GemNotFound, Bundler::GitError => e
   out.merge!(status: 'error', error: 'gemNotFound', errorMessage: e.message)
 end
 
