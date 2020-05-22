@@ -19,6 +19,8 @@
 		"onCommand:bundler.bundleInstall",
 		"onCommand:bundler.bundleOutdated",
 		"onCommand:bundler.reloadDependencies",
+		"onCommand:bundler.openGemfile",
+		"onCommand:bundler.openGem",
 		"workspaceContains:**/Gemfile"
 	],
 	"main": "./out/extension.js",
@@ -41,6 +43,11 @@
 				"command": "bundler.openGemfile",
 				"title": "Open Gemfile",
 				"icon": "$(go-to-file)"
+			},
+			{
+				"command": "bundler.openGem",
+				"title": "Open gem in new window",
+				"icon": "$(multiple-windows)"
 			}
 		],
 		"views": {
@@ -63,6 +70,11 @@
 				{
 					"command": "bundler.openGemfile",
 					"when": "view == bundler.bundlerDependencies && viewItem =~ /^definition\\./",
+					"group": "inline"
+				},
+				{
+					"command": "bundler.openGem",
+					"when": "view == bundler.bundlerDependencies && viewItem == dependency.resolved",
 					"group": "inline"
 				}
 			]
