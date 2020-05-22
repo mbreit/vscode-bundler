@@ -16,6 +16,15 @@ function runInTerminal(command: string, cwd: string): void {
   terminal.show();
 }
 
+function getBundlerPath(): string {
+  const config = vscode.workspace.getConfiguration('bundler');
+  return config.get('bundlerPath') as string;
+}
+
+export function runBundlerInTerminal(command: string, cwd: string): void {
+  runInTerminal(`${getBundlerPath()} ${command}`, cwd);
+}
+
 async function askForGemfileDirectory(): Promise<string | undefined> {
   const gemfiles = await vscode.workspace.findFiles('**/Gemfile');
 
@@ -39,14 +48,14 @@ async function askForGemfileDirectory(): Promise<string | undefined> {
   return path.dirname(quickPickResult.uri.fsPath);
 }
 
-export function registerTerminalCommand(
+export function registerBundlerTerminalCommand(
   context: vscode.ExtensionContext,
   commandId: string,
   command: string,
 ): void {
   const disposable = vscode.commands.registerCommand(commandId, async (cwdArg) => {
     const cwd = cwdArg ?? await askForGemfileDirectory();
-    if (cwd !== undefined) runInTerminal(command, cwd);
+    if (cwd !== undefined) runBundlerInTerminal(command, cwd);
   });
   context.subscriptions.push(disposable);
 }
