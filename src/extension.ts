@@ -2,47 +2,18 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { BundlerProvider } from './bundler/bundlerProvider';
-import { registerBundlerTerminalCommand } from './ui/terminalUtils';
-import { chooseGemfile } from './ui/chooseGemfile';
 import { createBundlerTreeview } from './ui/bundlerTree/bundlerTreeView';
-
 import { registerDefinitionErrorNotifications } from './ui/definitionErrorNotifications';
+import { registerCommands } from './ui/commands';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext): void {
   const bundlerProvider = new BundlerProvider(context);
 
-  registerBundlerTerminalCommand(
-    context,
-    'bundler.bundleInstall',
-    'install',
-  );
-  registerBundlerTerminalCommand(
-    context,
-    'bundler.bundleOutdated',
-    'outdated',
-  );
-
-  const reloadCommand = vscode.commands.registerCommand(
-    'bundler.reloadDependencies',
-    () => bundlerProvider.reload(),
-  );
-  context.subscriptions.push(reloadCommand);
-
-  const openGemfileCommand = vscode.commands.registerCommand(
-    'bundler.openGemfile',
-    async (element) => {
-      const uri = element.gemfileUri ?? await chooseGemfile();
-      if (uri) vscode.commands.executeCommand('vscode.open', uri);
-    },
-  );
-  context.subscriptions.push(openGemfileCommand);
-
-  const treeView = createBundlerTreeview(bundlerProvider);
-  context.subscriptions.push(treeView);
-
+  registerCommands(context, bundlerProvider);
   registerDefinitionErrorNotifications(bundlerProvider);
+  createBundlerTreeview(context, bundlerProvider);
 
   bundlerProvider.init();
 }

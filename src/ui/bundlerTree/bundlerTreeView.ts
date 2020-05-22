@@ -3,8 +3,9 @@ import { BundlerTreeDataProvider, BundlerTreeElement } from './bundlerTreeDataPr
 import { BundlerProvider } from '../../bundler/bundlerProvider';
 
 export function createBundlerTreeview(
+  context: vscode.ExtensionContext,
   bundlerProvider: BundlerProvider,
-): vscode.TreeView<BundlerTreeElement> {
+): void {
   const treeView = vscode.window.createTreeView<BundlerTreeElement>(
     'bundler.bundlerDependencies',
     {
@@ -12,5 +13,5 @@ export function createBundlerTreeview(
     },
   );
 
-  return treeView;
+  context.subscriptions.push(treeView);
 }
