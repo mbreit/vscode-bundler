@@ -36,6 +36,11 @@
 				"command": "bundler.reloadDependencies",
 				"title": "Reload Bundler dependencies",
 				"icon": "$(refresh)"
+			},
+			{
+				"command": "bundler.openGemfile",
+				"title": "Open Gemfile",
+				"icon": "$(go-to-file)"
 			}
 		],
 		"views": {
@@ -52,6 +57,13 @@
 					"command": "bundler.reloadDependencies",
 					"when": "view == bundler.bundlerDependencies",
 					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "bundler.openGemfile",
+					"when": "view == bundler.bundlerDependencies && viewItem =~ /^definition\\./",
+					"group": "inline"
 				}
 			]
 		},

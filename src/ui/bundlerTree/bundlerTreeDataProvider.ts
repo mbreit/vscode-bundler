@@ -34,12 +34,18 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
 
   getChildren(treeElement?: BundlerTreeElement): vscode.ProviderResult<BundlerTreeElement[]> {
     if (treeElement === undefined) {
-      const definitions = this.bundlerProvider.getDefinitions().values();
-      return [...definitions].map((definition) => new DefinitionTreeElement(definition));
+      const definitions = this.bundlerProvider.getDefinitions().entries();
+      return [...definitions].map(
+        ([gemfilePath, definition]) => new DefinitionTreeElement(
+          vscode.Uri.parse(gemfilePath), definition,
+        ),
+      );
     }
 
     return treeElement.getDependencies().map(
-      (dependency) => new DependencyTreeElement(treeElement.definition, dependency),
+      (dependency) => new DependencyTreeElement(
+        treeElement.gemfile, treeElement.definition, dependency,
+      ),
     );
   }
 
@@ -47,6 +53,7 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
     const treeItem = new vscode.TreeItem(dependency.name, vscode.TreeItemCollapsibleState.None);
     treeItem.description = dependency.requirement;
     treeItem.iconPath = new vscode.ThemeIcon('question');
+    treeItem.contextValue = 'dependency.unresolved';
     return treeItem;
   }
 
@@ -56,6 +63,7 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
       : vscode.TreeItemCollapsibleState.None);
     treeItem.description = spec.version;
     treeItem.iconPath = new vscode.ThemeIcon('package');
+    treeItem.contextValue = 'dependency.resolved';
     return treeItem;
   }
 
@@ -68,10 +76,12 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
     treeItem.label = path.basename(definition.path);
     treeItem.tooltip = gemfilePath;
     treeItem.iconPath = vscode.ThemeIcon.File;
+    treeItem.contextValue = 'definition.resolved';
     if (definition.errorMessage) {
       treeItem.label += ' ⚠';
       treeItem.tooltip += '\n\n';
       treeItem.tooltip += definition.errorMessage;
+      treeItem.contextValue = 'definition.unresolved';
     }
     return treeItem;
   }

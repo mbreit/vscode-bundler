@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { BundlerProvider } from './bundler/bundlerProvider';
 import { registerBundlerTerminalCommand } from './ui/terminalUtils';
+import { chooseGemfile } from './ui/chooseGemfile';
 import { createBundlerTreeview } from './ui/bundlerTree/bundlerTreeView';
 
 import { registerDefinitionErrorNotifications } from './ui/definitionErrorNotifications';
@@ -28,6 +29,15 @@ export function activate(context: vscode.ExtensionContext): void {
     () => bundlerProvider.reload(),
   );
   context.subscriptions.push(reloadCommand);
+
+  const openGemfileCommand = vscode.commands.registerCommand(
+    'bundler.openGemfile',
+    async (element) => {
+      const uri = element.gemfileUri ?? await chooseGemfile();
+      if (uri) vscode.commands.executeCommand('vscode.open', uri);
+    },
+  );
+  context.subscriptions.push(openGemfileCommand);
 
   const treeView = createBundlerTreeview(bundlerProvider);
   context.subscriptions.push(treeView);
