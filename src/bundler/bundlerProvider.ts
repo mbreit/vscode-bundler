@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 import { BundlerDefinition, BundlerLoader } from './bundlerLoader';
 
-type UpdateCallback = (definitions: Map<string, BundlerDefinition>) => void;
+type UpdateCallback = (gemfile: vscode.Uri, definition: BundlerDefinition | undefined) => void;
 
 export class BundlerProvider {
   private bundlerLoader: BundlerLoader;
@@ -78,19 +78,19 @@ export class BundlerProvider {
     });
     const definition = await this.bundlerLoader.loadDefinition(dir);
     this.bundlerDefinitions.set(gemfile.toString(), definition);
-    this.notifyOnUpdate();
+    this.notifyOnUpdate(gemfile, definition);
   }
 
   private async removeFile(gemfileOrLockfile: vscode.Uri): Promise<void> {
     const gemfile = this.gemfilePath(gemfileOrLockfile);
 
     this.bundlerDefinitions.delete(gemfile.toString());
-    this.notifyOnUpdate();
+    this.notifyOnUpdate(gemfile, undefined);
   }
 
-  private notifyOnUpdate(): void {
+  private notifyOnUpdate(gemfile: vscode.Uri, definition: BundlerDefinition | undefined): void {
     this.onUpdateCallbacks.forEach((callback) => {
-      callback.call(this, this.bundlerDefinitions);
+      callback.call(this, gemfile, definition);
     });
   }
 }

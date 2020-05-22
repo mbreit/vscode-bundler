@@ -2,25 +2,25 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import { BundlerProvider } from './bundler/bundlerProvider';
-import { registerTerminalCommand } from './ui/terminalUtils';
+import { registerBundlerTerminalCommand } from './ui/terminalUtils';
 import { createBundlerTreeview } from './ui/bundlerTree/bundlerTreeView';
+
+import { registerDefinitionErrorNotifications } from './ui/definitionErrorNotifications';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext): void {
-  const config = vscode.workspace.getConfiguration('bundler');
-  const bundlerPath = config.get('bundlerPath');
   const bundlerProvider = new BundlerProvider(context);
 
-  registerTerminalCommand(
+  registerBundlerTerminalCommand(
     context,
     'bundler.bundleInstall',
-    `${bundlerPath} install`,
+    'install',
   );
-  registerTerminalCommand(
+  registerBundlerTerminalCommand(
     context,
     'bundler.bundleOutdated',
-    `${bundlerPath} outdated`,
+    'outdated',
   );
 
   const reloadCommand = vscode.commands.registerCommand(
@@ -31,6 +31,8 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const treeView = createBundlerTreeview(bundlerProvider);
   context.subscriptions.push(treeView);
+
+  registerDefinitionErrorNotifications(bundlerProvider);
 
   bundlerProvider.init();
 }
