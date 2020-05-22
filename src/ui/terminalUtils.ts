@@ -26,13 +26,13 @@ export function runBundlerInTerminal(command: string, cwd: string): void {
 }
 
 /**
- * Ask the user for a directory with a Gemfile if nessecary
+ * Ask the user for a directory with a Gemfile if necessary
  *
  * If there is only one Gemfile in the workspace, its directory will be returned
  * without asking the user.
  *
  * @returns Promise that resolves to the path name to the directory
- *  or undefined if the selection was cancelled,
+ *  or `undefined` if the selection was canceled,
  *  or rejects if there is no Gemfile in the workspace
  */
 async function askForGemfileDirectory(): Promise<string | undefined> {
@@ -64,9 +64,11 @@ export function registerBundlerTerminalCommand(
   const disposable = vscode.commands.registerCommand(commandId, async (cwdArg) => {
     try {
       const cwd = cwdArg ?? await askForGemfileDirectory();
+      // cwd is undefined if the user has canceled the selection,
+      // in which case we have nothing to do
       if (cwd !== undefined) runBundlerInTerminal(command, cwd);
     } catch (err) {
-      vscode.window.showErrorMessage(err);
+      vscode.window.showErrorMessage(err.message);
     }
   });
   context.subscriptions.push(disposable);
