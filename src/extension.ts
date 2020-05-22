@@ -5,6 +5,8 @@ import { BundlerProvider } from './bundler/bundlerProvider';
 import { registerTerminalCommand } from './ui/terminalUtils';
 import { createBundlerTreeview } from './ui/bundlerTree/bundlerTreeView';
 
+import path = require('path');
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext): void {
@@ -31,6 +33,19 @@ export function activate(context: vscode.ExtensionContext): void {
 
   const treeView = createBundlerTreeview(bundlerProvider);
   context.subscriptions.push(treeView);
+
+  bundlerProvider.onUpdate((gemfilePath, definition) => {
+    if (definition?.error === 'gemNotFound') {
+      vscode.window.showInformationMessage(
+        definition?.errorMessage ?? 'Could not resolve all gems',
+        'Run bundle install',
+      ).then((item) => {
+        if (item === 'Run bundle install') {
+          vscode.commands.executeCommand('bundler.bundleInstall', path.dirname(gemfilePath.fsPath));
+        }
+      });
+    }
+  });
 
   bundlerProvider.init();
 }
