@@ -4,7 +4,7 @@
 	"description": "Support for viewing and opening Ruby Bundler dependencies",
 	"publisher": "mbreit",
 	"private": true,
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"engines": {
 		"vscode": "^1.45.0"
 	},
