@@ -64,6 +64,7 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
     treeItem.description = spec.version;
     treeItem.iconPath = new vscode.ThemeIcon('package');
     treeItem.contextValue = 'dependency.resolved';
+    treeItem.tooltip = spec.summary;
     return treeItem;
   }
 
