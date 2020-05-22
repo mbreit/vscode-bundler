@@ -25,13 +25,20 @@ export function runBundlerInTerminal(command: string, cwd: string): void {
   runInTerminal(`${getBundlerPath()} ${command}`, cwd);
 }
 
+/**
+ * Ask the user for a directory with a Gemfile if nessecary
+ *
+ * If there is only one Gemfile in the workspace, its directory will be returned
+ * without asking the user.
+ *
+ * @returns Promise that resolves to the path name to the directory
+ *  or undefined if the selection was cancelled,
+ *  or rejects if there is no Gemfile in the workspace
+ */
 async function askForGemfileDirectory(): Promise<string | undefined> {
   const gemfiles = await vscode.workspace.findFiles('**/Gemfile');
 
-  if (gemfiles.length === 0) {
-    vscode.window.showErrorMessage('No Gemfile found in current workspace');
-    return undefined;
-  }
+  if (gemfiles.length === 0) throw new Error('No Gemfile found in current workspace');
 
   if (gemfiles.length === 1) return path.dirname(gemfiles[0].fsPath);
 
@@ -43,6 +50,7 @@ async function askForGemfileDirectory(): Promise<string | undefined> {
     }),
   );
 
+  // Return undefined if selection was cancelled
   if (quickPickResult === undefined) return undefined;
 
   return path.dirname(quickPickResult.uri.fsPath);
@@ -54,8 +62,12 @@ export function registerBundlerTerminalCommand(
   command: string,
 ): void {
   const disposable = vscode.commands.registerCommand(commandId, async (cwdArg) => {
-    const cwd = cwdArg ?? await askForGemfileDirectory();
-    if (cwd !== undefined) runBundlerInTerminal(command, cwd);
+    try {
+      const cwd = cwdArg ?? await askForGemfileDirectory();
+      if (cwd !== undefined) runBundlerInTerminal(command, cwd);
+    } catch (err) {
+      vscode.window.showErrorMessage(err);
+    }
   });
   context.subscriptions.push(disposable);
 }
