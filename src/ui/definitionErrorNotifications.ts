@@ -13,9 +13,10 @@ export function registerDefinitionErrorNotifications(bundlerProvider: BundlerPro
       const messageItems = (commands || ['install']).map(
         (command) => ({ command, title: `Run bundle ${command}` }),
       );
+      const dirName = path.basename(path.dirname(gemfilePath.fsPath));
 
       vscode.window.showInformationMessage(
-        definition?.errorMessage ?? 'Could not resolve all gems',
+        `${dirName}: ${definition?.errorMessage ?? 'Could not resolve all gems'}`,
         ...messageItems,
       ).then((item) => {
         if (item) runBundlerInTerminal(item.command, path.dirname(gemfilePath.fsPath));
