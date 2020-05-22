@@ -4,16 +4,17 @@ import { chooseGemfile, chooseGemfileDir } from './chooseGemfile';
 import { runBundlerInTerminal } from './terminalUtils';
 import { DependencyTreeElement } from './bundlerTree/dependencyTreeElement';
 import { DefinitionTreeElement } from './bundlerTree/definitionTreeElement';
-import { BundlerSpec } from '../bundler/bundlerLoader';
+import { chooseGem } from './chooseGem';
 
 function registerBundlerTerminalCommand(
   context: vscode.ExtensionContext,
+  bundlerProvider: BundlerProvider,
   commandId: string,
   command: string,
 ): void {
   const disposable = vscode.commands.registerCommand(commandId, async (cwdArg) => {
     try {
-      const cwd = cwdArg ?? await chooseGemfileDir();
+      const cwd = cwdArg ?? await chooseGemfileDir(bundlerProvider);
       // cwd is undefined if the user has canceled the selection,
       // in which case we have nothing to do
       if (cwd !== undefined) runBundlerInTerminal(command, cwd);
@@ -35,36 +36,18 @@ function registerReloadDependenciesCommand(
   context.subscriptions.push(reloadCommand);
 }
 
-function registerOpenGemfileCommand(context: vscode.ExtensionContext): void {
+function registerOpenGemfileCommand(
+  context: vscode.ExtensionContext,
+  bundlerProvider: BundlerProvider,
+): void {
   const command = vscode.commands.registerCommand(
     'bundler.openGemfile',
     async (element: DefinitionTreeElement) => {
-      const uri = element.gemfile ?? await chooseGemfile();
+      const uri = element.gemfile ?? await chooseGemfile(bundlerProvider);
       if (uri) vscode.commands.executeCommand('vscode.open', uri);
     },
   );
   context.subscriptions.push(command);
-}
-
-async function chooseGem(bundlerProvider: BundlerProvider): Promise<BundlerSpec | undefined> {
-  const gemfile = await chooseGemfile();
-  if (gemfile === undefined) return undefined;
-
-  const definition = bundlerProvider.getDefinitions().get(gemfile.toString());
-
-  if (definition?.specs === undefined) throw new Error('Gems are not resolved');
-
-  const quickPickResult = await vscode.window.showQuickPick(
-    definition.specs.map((spec) => {
-      const label = spec.name;
-      const detail = spec.summary;
-      const description = spec.version;
-      return {
-        label, detail, spec, description,
-      };
-    }),
-  );
-  return quickPickResult?.spec;
 }
 
 function registerOpenGemCommand(
@@ -87,9 +70,9 @@ export function registerCommands(
   context: vscode.ExtensionContext,
   bundlerProvider: BundlerProvider,
 ): void {
-  registerBundlerTerminalCommand(context, 'bundler.bundleInstall', 'install');
-  registerBundlerTerminalCommand(context, 'bundler.bundleOutdated', 'outdated');
+  registerBundlerTerminalCommand(context, bundlerProvider, 'bundler.bundleInstall', 'install');
+  registerBundlerTerminalCommand(context, bundlerProvider, 'bundler.bundleOutdated', 'outdated');
   registerReloadDependenciesCommand(context, bundlerProvider);
-  registerOpenGemfileCommand(context);
+  registerOpenGemfileCommand(context, bundlerProvider);
   registerOpenGemCommand(context, bundlerProvider);
 }

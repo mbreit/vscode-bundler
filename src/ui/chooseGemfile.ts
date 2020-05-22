@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { BundlerProvider } from '../bundler/bundlerProvider';
 
 import path = require('path');
 
@@ -16,10 +17,19 @@ export interface GemfileQuickPickItem extends vscode.QuickPickItem {
  *  or `undefined` if the selection was canceled,
  *  or rejects if there is no Gemfile in the workspace
  */
-export async function chooseGemfile(): Promise<vscode.Uri | undefined> {
-  const gemfiles = await vscode.workspace.findFiles('**/Gemfile');
+export async function chooseGemfile(
+  bundlerProvider: BundlerProvider, onlyResolved = false,
+): Promise<vscode.Uri | undefined> {
+  let gemfiles = bundlerProvider.getGemfiles();
+  if (onlyResolved) {
+    gemfiles = gemfiles.filter((gemfile) => !!bundlerProvider.getDefinition(gemfile)?.specs);
+  }
 
-  if (gemfiles.length === 0) throw new Error('No Gemfile found in current workspace');
+  if (gemfiles.length === 0) {
+    throw new Error(onlyResolved
+      ? 'No resolved Gemfile found in current workspace'
+      : 'No Gemfile found in current workspace');
+  }
 
   if (gemfiles.length === 1) return gemfiles[0];
 
@@ -43,8 +53,10 @@ export async function chooseGemfile(): Promise<vscode.Uri | undefined> {
  *  or `undefined` if the selection was canceled,
  *  or rejects if there is no Gemfile in the workspace
  */
-export async function chooseGemfileDir(): Promise<string | undefined> {
-  const uri = await chooseGemfile();
+export async function chooseGemfileDir(
+  bundlerProvider: BundlerProvider,
+): Promise<string | undefined> {
+  const uri = await chooseGemfile(bundlerProvider);
   if (uri === undefined) return undefined;
 
   return path.dirname(uri.fsPath);

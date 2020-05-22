@@ -51,6 +51,14 @@ export class BundlerProvider {
     return this.bundlerDefinitions;
   }
 
+  public getGemfiles(): Array<vscode.Uri> {
+    return [...this.bundlerDefinitions.keys()].map((gemfilePath) => vscode.Uri.parse(gemfilePath));
+  }
+
+  public getDefinition(gemfile: vscode.Uri): BundlerDefinition | undefined {
+    return this.bundlerDefinitions.get(gemfile.toString());
+  }
+
   private async findGemfile(gemfileOrLockfile: vscode.Uri): Promise<vscode.Uri | undefined> {
     const gemfilePath = this.gemfilePath(gemfileOrLockfile);
     try {
