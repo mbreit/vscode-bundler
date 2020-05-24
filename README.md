@@ -9,7 +9,12 @@ repository](https://github.com/mbreit/vscode-bundler).
 Already implemented features:
 
 * Commands for `bundle install` and `bundle outdated`
-* Tree view for Bundler dependencies:
+* Command to open a gem dependency in a new window
+* Notifications if gems are not installed with actions to run bundle install
+  or bundle update
+* Tree view in the Side Bar showing all Gemfiles in the workspace with
+  their dependencies with icons to jump to the Gemfile and
+  to open a gem in a new window:
 
 ![Tree View Demo](docs/images/dependency-tree.gif)
 
@@ -17,10 +22,8 @@ Planned features are:
 
 * Providing the most used Bundler commands as VS Code commands in the VS Code
   Command Palette and provide QuickPick inputs for arguments
-* Adding a tree view to the Side Bar showing all Gemfiles in your workspace
-  with their resolved dependencies, their version and their dependencies and
-  some useful actions like opening the Gem in a new window or add it to the
-  current workspace
+* Command for opening urls from gemspecs in the browser
+* Command for adding a dependency folder to the current workspace
 * Showing useful Gem information, links and actions in the Gemfile with a Code
   Lens and/or hover provider
 
