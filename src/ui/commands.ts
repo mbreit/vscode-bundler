@@ -12,16 +12,19 @@ function registerBundlerTerminalCommand(
   commandId: string,
   command: string,
 ): void {
-  const disposable = vscode.commands.registerCommand(commandId, async (cwdArg) => {
-    try {
-      const cwd = cwdArg ?? await chooseGemfileDir(bundlerProvider);
-      // cwd is undefined if the user has canceled the selection,
-      // in which case we have nothing to do
-      if (cwd !== undefined) runBundlerInTerminal(command, cwd);
-    } catch (err) {
-      vscode.window.showErrorMessage(err.message);
-    }
-  });
+  const disposable = vscode.commands.registerCommand(
+    commandId,
+    async (cwdArg: string | undefined) => {
+      try {
+        const cwd = cwdArg ?? await chooseGemfileDir(bundlerProvider);
+        // cwd is undefined if the user has canceled the selection,
+        // in which case we have nothing to do
+        if (cwd !== undefined) runBundlerInTerminal(command, cwd);
+      } catch (err) {
+        vscode.window.showErrorMessage(err.message);
+      }
+    },
+  );
   context.subscriptions.push(disposable);
 }
 
@@ -42,8 +45,8 @@ function registerOpenGemfileCommand(
 ): void {
   const command = vscode.commands.registerCommand(
     'bundler.openGemfile',
-    async (element: DefinitionTreeElement) => {
-      const uri = element.gemfile ?? await chooseGemfile(bundlerProvider);
+    async (element: DefinitionTreeElement | undefined) => {
+      const uri = element?.gemfile ?? await chooseGemfile(bundlerProvider);
       if (uri) vscode.commands.executeCommand('vscode.open', uri);
     },
   );
@@ -56,7 +59,7 @@ function registerOpenGemCommand(
 ): void {
   const command = vscode.commands.registerCommand(
     'bundler.openGem',
-    async (element: DependencyTreeElement) => {
+    async (element: DependencyTreeElement | undefined) => {
       const spec = element?.getSpec() ?? await chooseGem(bundlerProvider);
       if (spec) {
         vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.parse(spec.path), true);
