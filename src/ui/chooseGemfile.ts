@@ -43,6 +43,9 @@ export async function chooseGemfile(
       const detail = vscode.workspace.asRelativePath(uri);
       return { label, detail, uri };
     }),
+    {
+      placeHolder: 'Select a directory with a Gemfile',
+    },
   );
   return quickPickResult?.uri;
 }

@@ -5,6 +5,7 @@ import { BundlerSpec } from '../bundler/bundlerLoader';
 
 export async function chooseGem(
   bundlerProvider: BundlerProvider,
+  placeHolder = 'Choose a gem',
 ): Promise<BundlerSpec | undefined> {
   const gemfile = await chooseGemfile(bundlerProvider, true);
   if (gemfile === undefined) return undefined;
@@ -22,6 +23,7 @@ export async function chooseGem(
         label, detail, spec, description,
       };
     }),
+    { placeHolder },
   );
   return quickPickResult?.spec;
 }

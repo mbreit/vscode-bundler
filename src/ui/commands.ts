@@ -60,7 +60,10 @@ function registerOpenGemCommand(
   const command = vscode.commands.registerCommand(
     'bundler.openGem',
     async (element: DependencyTreeElement | undefined) => {
-      const spec = element?.getSpec() ?? await chooseGem(bundlerProvider);
+      const spec = element?.getSpec() ?? await chooseGem(
+        bundlerProvider,
+        'Choose a gem to open in a new window',
+      );
       if (spec) {
         vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.parse(spec.path), true);
       }
