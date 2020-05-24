@@ -47,6 +47,10 @@ export class BundlerProvider {
     await this.loadAllGemfiles();
   }
 
+  public hasGemfile(): boolean {
+    return this.bundlerDefinitions.size > 0;
+  }
+
   public getGemfiles(): Array<vscode.Uri> {
     return [...this.bundlerDefinitions.keys()].map((gemfilePath) => vscode.Uri.parse(gemfilePath));
   }

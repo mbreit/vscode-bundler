@@ -11,6 +11,14 @@ import { registerCommands } from './ui/commands';
 export function activate(context: vscode.ExtensionContext): void {
   const bundlerProvider = new BundlerProvider(context);
 
+  bundlerProvider.onUpdate(() => {
+    vscode.commands.executeCommand(
+      'setContext',
+      'bundler:hasGemfile',
+      bundlerProvider.hasGemfile(),
+    );
+  });
+
   registerCommands(context, bundlerProvider);
   registerDefinitionErrorNotifications(bundlerProvider);
   createBundlerTreeview(context, bundlerProvider);

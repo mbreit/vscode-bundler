@@ -16,11 +16,7 @@
 		"url": "https://github.com/mbreit/vscode-bundler"
 	},
 	"activationEvents": [
-		"onCommand:bundler.bundleInstall",
-		"onCommand:bundler.bundleOutdated",
 		"onCommand:bundler.reloadDependencies",
-		"onCommand:bundler.openGemfile",
-		"onCommand:bundler.openGem",
 		"workspaceContains:**/Gemfile"
 	],
 	"main": "./out/extension.js",
@@ -59,11 +55,30 @@
 			"explorer": [
 				{
 					"id": "bundler.bundlerDependencies",
-					"name": "Bundler Dependencies"
+					"name": "Bundler Dependencies",
+					"when": "bundler:hasGemfile"
 				}
 			]
 		},
 		"menus": {
+			"commandPalette": [
+				{
+					"command": "bundler.bundleInstall",
+					"when": "bundler:hasGemfile"
+				},
+				{
+					"command": "bundler.bundleOutdated",
+					"when": "bundler:hasGemfile"
+				},
+				{
+					"command": "bundler.openGemfile",
+					"when": "bundler:hasGemfile"
+				},
+				{
+					"command": "bundler.openGem",
+					"when": "bundler:hasGemfile"
+				}
+			],
 			"view/title": [
 				{
 					"command": "bundler.reloadDependencies",
