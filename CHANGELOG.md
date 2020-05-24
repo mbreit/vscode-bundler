@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.4](https://github.com/mbreit/vscode-bundler/compare/v0.0.3...v0.0.4) (2020-05-24)
+
+
+### Features
+
+* group all commands in a "Bundler" category ([d5f310e](https://github.com/mbreit/vscode-bundler/commit/d5f310e2dfe633164b934e0b4ee39fe414404f0b))
+* hide dependency view and commands in project without Gemfiles ([b235f3b](https://github.com/mbreit/vscode-bundler/commit/b235f3b7ce79bcd7bebe06fcad612bba94f00342))
+
+
+### Bug Fixes
+
+* handle undefined argument in open gemfile command ([4582577](https://github.com/mbreit/vscode-bundler/commit/4582577d9507238f95f3d098ed2c23376b8c1700))
+
 ## [0.0.3](https://github.com/mbreit/vscode-bundler/compare/v0.0.2...v0.0.3) (2020-05-22)
 
 
