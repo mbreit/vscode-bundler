@@ -28,26 +28,31 @@
 		"commands": [
 			{
 				"command": "bundler.bundleInstall",
-				"title": "Bundle install"
+				"title": "Run bundle install",
+				"category": "Bundler"
 			},
 			{
 				"command": "bundler.bundleOutdated",
-				"title": "Bundle outdated"
+				"title": "Run bundle outdated",
+				"category": "Bundler"
 			},
 			{
 				"command": "bundler.reloadDependencies",
-				"title": "Reload Bundler dependencies",
-				"icon": "$(refresh)"
+				"title": "Reload dependencies",
+				"icon": "$(refresh)",
+				"category": "Bundler"
 			},
 			{
 				"command": "bundler.openGemfile",
 				"title": "Open Gemfile",
-				"icon": "$(go-to-file)"
+				"icon": "$(go-to-file)",
+				"category": "Bundler"
 			},
 			{
 				"command": "bundler.openGem",
 				"title": "Open gem in new window",
-				"icon": "$(multiple-windows)"
+				"icon": "$(multiple-windows)",
+				"category": "Bundler"
 			}
 		],
 		"views": {
