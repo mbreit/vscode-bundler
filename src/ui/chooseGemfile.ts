@@ -13,12 +13,16 @@ export interface GemfileQuickPickItem extends vscode.QuickPickItem {
  * If there is only one Gemfile in the workspace, it will be returned
  * without asking the user.
  *
+ * @param bundlerProvider the `BundlerProvider` instance
+ * @param onlyResolved return only Gemfiles with resolved dependencies
+ *
  * @returns Promise that resolves to the uri of the Gemfile
  *  or `undefined` if the selection was canceled,
  *  or rejects if there is no Gemfile in the workspace
  */
 export async function chooseGemfile(
-  bundlerProvider: BundlerProvider, onlyResolved = false,
+  bundlerProvider: BundlerProvider,
+  onlyResolved = false,
 ): Promise<vscode.Uri | undefined> {
   let gemfiles = bundlerProvider.getGemfiles();
   if (onlyResolved) {
@@ -48,6 +52,8 @@ export async function chooseGemfile(
  *
  * If there is only one Gemfile in the workspace, its directory will be returned
  * without asking the user.
+ *
+ * @param bundlerProvider the `BundlerProvider` instance
  *
  * @returns Promise that resolves to the path name to the directory
  *  or `undefined` if the selection was canceled,
