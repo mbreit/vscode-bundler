@@ -47,12 +47,14 @@ export class BundlerProvider {
     await this.loadAllGemfiles();
   }
 
-  public getDefinitions(): Map<string, BundlerDefinition> {
-    return this.bundlerDefinitions;
-  }
-
   public getGemfiles(): Array<vscode.Uri> {
     return [...this.bundlerDefinitions.keys()].map((gemfilePath) => vscode.Uri.parse(gemfilePath));
+  }
+
+  public getGemfilesWithDefinitions(): Array<[vscode.Uri, BundlerDefinition]> {
+    return [...this.bundlerDefinitions.entries()].map(
+      ([gemfilePath, definition]) => [vscode.Uri.parse(gemfilePath), definition],
+    );
   }
 
   public getDefinition(gemfile: vscode.Uri): BundlerDefinition | undefined {

@@ -9,7 +9,7 @@ export async function chooseGem(
   const gemfile = await chooseGemfile(bundlerProvider, true);
   if (gemfile === undefined) return undefined;
 
-  const definition = bundlerProvider.getDefinitions().get(gemfile.toString());
+  const definition = bundlerProvider.getDefinition(gemfile);
 
   if (definition?.specs === undefined) throw new Error('Gems are not resolved');
 

@@ -34,11 +34,8 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
 
   getChildren(treeElement?: BundlerTreeElement): vscode.ProviderResult<BundlerTreeElement[]> {
     if (treeElement === undefined) {
-      const definitions = this.bundlerProvider.getDefinitions().entries();
-      return [...definitions].map(
-        ([gemfilePath, definition]) => new DefinitionTreeElement(
-          vscode.Uri.parse(gemfilePath), definition,
-        ),
+      return this.bundlerProvider.getGemfilesWithDefinitions().map(
+        ([gemfile, definition]) => new DefinitionTreeElement(gemfile, definition),
       );
     }
 
