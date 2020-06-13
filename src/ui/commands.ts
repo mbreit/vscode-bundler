@@ -60,13 +60,21 @@ function registerOpenGemCommand(
 ): void {
   const command = vscode.commands.registerCommand(
     'bundler.openGem',
-    async (element: DependencyTreeElement | undefined) => {
-      const spec = element?.getSpec() ?? await chooseGem(
-        bundlerProvider,
-        'Choose a gem to open in a new window',
-      );
-      if (spec) {
-        vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.parse(spec.path), true);
+    async (element: DependencyTreeElement | { path: string } | undefined) => {
+      let path;
+      if (element instanceof DependencyTreeElement) {
+        path = element.getSpec()?.path;
+      } else if (element) {
+        path = element.path;
+      } else {
+        const spec = await chooseGem(
+          bundlerProvider,
+          'Choose a gem to open in a new window',
+        );
+        path = spec?.path;
+      }
+      if (path) {
+        vscode.commands.executeCommand('vscode.openFolder', vscode.Uri.parse(path), true);
       }
     },
   );
@@ -79,16 +87,24 @@ function registerAddGemToWorkspaceCommand(
 ): void {
   const command = vscode.commands.registerCommand(
     'bundler.addGemToWorkspace',
-    async (element: DependencyTreeElement | undefined) => {
-      const spec = element?.getSpec() ?? await chooseGem(
-        bundlerProvider,
-        'Choose a gem to add to the current workspace',
-      );
-      if (spec) {
+    async (element: DependencyTreeElement | { path: string } | undefined) => {
+      let path;
+      if (element instanceof DependencyTreeElement) {
+        path = element.getSpec()?.path;
+      } else if (element) {
+        path = element.path;
+      } else {
+        const spec = await chooseGem(
+          bundlerProvider,
+          'Choose a gem to add to the current workspace',
+        );
+        path = spec?.path;
+      }
+      if (path) {
         vscode.workspace.updateWorkspaceFolders(
           vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders.length : 0,
           null,
-          { uri: vscode.Uri.parse(spec.path) },
+          { uri: vscode.Uri.parse(path) },
         );
       }
     },

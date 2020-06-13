@@ -5,6 +5,7 @@ import { BundlerProvider } from './bundler/bundlerProvider';
 import { createBundlerTreeview } from './ui/bundlerTree/bundlerTreeView';
 import { registerDefinitionErrorNotifications } from './ui/definitionErrorNotifications';
 import { registerCommands } from './ui/commands';
+import { registerGemfileHoverProvider } from './ui/gemfileHoverProvider';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -22,6 +23,7 @@ export function activate(context: vscode.ExtensionContext): void {
   registerCommands(context, bundlerProvider);
   registerDefinitionErrorNotifications(bundlerProvider);
   createBundlerTreeview(context, bundlerProvider);
+  registerGemfileHoverProvider(context, bundlerProvider);
 
   bundlerProvider.init();
 }
