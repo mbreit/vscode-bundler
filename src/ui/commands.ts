@@ -72,6 +72,29 @@ function registerOpenGemCommand(
   context.subscriptions.push(command);
 }
 
+function registerAddGemToWorkspaceCommand(
+  context: vscode.ExtensionContext,
+  bundlerProvider: BundlerProvider,
+): void {
+  const command = vscode.commands.registerCommand(
+    'bundler.addGemToWorkspace',
+    async (element: DependencyTreeElement | undefined) => {
+      const spec = element?.getSpec() ?? await chooseGem(
+        bundlerProvider,
+        'Choose a gem to add to the current workspace',
+      );
+      if (spec) {
+        vscode.workspace.updateWorkspaceFolders(
+          vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders.length : 0,
+          null,
+          { uri: vscode.Uri.parse(spec.path) },
+        );
+      }
+    },
+  );
+  context.subscriptions.push(command);
+}
+
 export function registerCommands(
   context: vscode.ExtensionContext,
   bundlerProvider: BundlerProvider,
@@ -81,4 +104,5 @@ export function registerCommands(
   registerReloadDependenciesCommand(context, bundlerProvider);
   registerOpenGemfileCommand(context, bundlerProvider);
   registerOpenGemCommand(context, bundlerProvider);
+  registerAddGemToWorkspaceCommand(context, bundlerProvider);
 }
