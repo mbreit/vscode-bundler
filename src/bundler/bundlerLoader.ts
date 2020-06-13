@@ -9,6 +9,7 @@ export interface BundlerSpec {
   homepage: string;
   path: string;
   dependencies: Array<BundlerDependency>;
+  metadata: { [key: string]: string };
 }
 
 export interface BundlerDependency {

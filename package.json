@@ -55,6 +55,12 @@
 				"title": "Add gem folder to the current workspace",
 				"icon": "$(file-submodule)",
 				"category": "Bundler"
+			},
+			{
+				"command": "bundler.openGemWebsite",
+				"title": "Open gem website",
+				"icon": "$(globe)",
+				"category": "Bundler"
 			}
 		],
 		"views": {
@@ -87,6 +93,10 @@
 				{
 					"command": "bundler.addGemToWorkspace",
 					"when": "bundler:hasGemfile"
+				},
+				{
+					"command": "bundler.openGemWebsite",
+					"when": "bundler:hasGemfile"
 				}
 			],
 			"view/title": [
@@ -103,14 +113,19 @@
 					"group": "inline"
 				},
 				{
-					"command": "bundler.openGem",
+					"command": "bundler.openGemWebsite",
 					"when": "view == bundler.bundlerDependencies && viewItem == dependency.resolved",
 					"group": "bundler@1"
 				},
 				{
-					"command": "bundler.addGemToWorkspace",
+					"command": "bundler.openGem",
 					"when": "view == bundler.bundlerDependencies && viewItem == dependency.resolved",
 					"group": "bundler@2"
+				},
+				{
+					"command": "bundler.addGemToWorkspace",
+					"when": "view == bundler.bundlerDependencies && viewItem == dependency.resolved",
+					"group": "bundler@3"
 				}
 			]
 		},

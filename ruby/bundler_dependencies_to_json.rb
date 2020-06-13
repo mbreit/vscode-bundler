@@ -33,7 +33,8 @@ begin
       path: spec.full_gem_path,
       dependencies: spec.dependencies.select(&:runtime?).map do |dependency|
         dependency_to_json(dependency)
-      end
+      end,
+      metadata: spec.metadata
     }
   end
 rescue Bundler::Dsl::DSLError => e

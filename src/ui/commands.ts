@@ -5,6 +5,7 @@ import { runBundlerInTerminal } from './terminalUtils';
 import { DependencyTreeElement } from './bundlerTree/dependencyTreeElement';
 import { DefinitionTreeElement } from './bundlerTree/definitionTreeElement';
 import { chooseGem } from './chooseGem';
+import { chooseGemWebsite } from './chooseGemWebsite';
 
 function registerBundlerTerminalCommand(
   context: vscode.ExtensionContext,
@@ -95,6 +96,26 @@ function registerAddGemToWorkspaceCommand(
   context.subscriptions.push(command);
 }
 
+function registerOpenGemWebsiteCommand(
+  context: vscode.ExtensionContext,
+  bundlerProvider: BundlerProvider,
+): void {
+  const command = vscode.commands.registerCommand(
+    'bundler.openGemWebsite',
+    async (element: DependencyTreeElement | undefined) => {
+      const spec = element?.getSpec() ?? await chooseGem(
+        bundlerProvider,
+        'Choose a gem to open a website',
+      );
+      if (spec) {
+        const url = await chooseGemWebsite(spec);
+        if (url) { vscode.env.openExternal(url); }
+      }
+    },
+  );
+  context.subscriptions.push(command);
+}
+
 export function registerCommands(
   context: vscode.ExtensionContext,
   bundlerProvider: BundlerProvider,
@@ -105,4 +126,5 @@ export function registerCommands(
   registerOpenGemfileCommand(context, bundlerProvider);
   registerOpenGemCommand(context, bundlerProvider);
   registerAddGemToWorkspaceCommand(context, bundlerProvider);
+  registerOpenGemWebsiteCommand(context, bundlerProvider);
 }
