@@ -34,7 +34,8 @@ begin
       dependencies: spec.dependencies.select(&:runtime?).map do |dependency|
         dependency_to_json(dependency)
       end,
-      metadata: spec.metadata
+      metadata: spec.metadata,
+      source: spec.source.class.name.split('::').last.downcase
     }
   end
 rescue Bundler::Dsl::DSLError => e

@@ -3,7 +3,7 @@ import { BundlerProvider } from '../bundler/bundlerProvider';
 import { BundlerSpec } from '../bundler/bundlerLoader';
 import { getSpecUrls } from '../bundler/getSpecUrls';
 
-const GEM_REGEXP = /(gem\s['"])([^'"]+)['"]/;
+const GEM_REGEXP = /(gem\(?\s*['"])([^'"]+)['"]/;
 
 class GemfileHoverProvider implements vscode.HoverProvider {
   constructor(private bundlerProvider: BundlerProvider) { }
@@ -50,7 +50,7 @@ class GemfileHoverProvider implements vscode.HoverProvider {
     const line = document.lineAt(position);
     const match = line.text.match(GEM_REGEXP);
 
-    if (match?.index) {
+    if (match?.index !== undefined) {
       const name = match[2];
       const nameStart = match.index + match[1].length;
       const nameEnd = nameStart + name.length;
