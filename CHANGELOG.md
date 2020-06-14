@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.5](https://github.com/mbreit/vscode-bundler/compare/v0.0.4...v0.0.5) (2020-06-14)
+
+
+### Features
+
+* add HoverProvider for Gemfiles ([0c537f4](https://github.com/mbreit/vscode-bundler/commit/0c537f48d45bd9e39c631474fe3e04c626c6b2ab))
+* add placeholders to quickpick inputs ([4f8b1fa](https://github.com/mbreit/vscode-bundler/commit/4f8b1fa30c60d380222e4957c1a5f8de98bc6579))
+* add rubygems url for all gems with rubygems as source ([b26005b](https://github.com/mbreit/vscode-bundler/commit/b26005b66ad39e0d0556463111963c376a411acd))
+* new "Add gem folder to workspace" command ([9d20eb5](https://github.com/mbreit/vscode-bundler/commit/9d20eb509cbbbf3f1044cdd8e3d2e8b11601e158))
+* new "Open gem website" command ([c164a0f](https://github.com/mbreit/vscode-bundler/commit/c164a0fa67f5f5da4ec3519aec757181217fe337))
+
 ## [0.0.4](https://github.com/mbreit/vscode-bundler/compare/v0.0.3...v0.0.4) (2020-05-24)
 
 
