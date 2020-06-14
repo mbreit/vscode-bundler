@@ -6,6 +6,14 @@ import { DefinitionTreeElement } from './definitionTreeElement';
 
 import path = require('path');
 
+const SOURCE_ICONS: { [key: string]: string } = {
+  path: 'file-symlink-directory',
+  git: 'source-control',
+  rubygems: 'package',
+  gemspec: 'ruby',
+};
+const DEFAULT_SOURCE_ICON = 'question';
+
 export type BundlerTreeElement = DefinitionTreeElement | DependencyTreeElement;
 
 export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerTreeElement> {
@@ -49,7 +57,7 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
   private unresolvedDependencyTreeItem(dependency: BundlerDependency): vscode.TreeItem {
     const treeItem = new vscode.TreeItem(dependency.name, vscode.TreeItemCollapsibleState.None);
     treeItem.description = dependency.requirement;
-    treeItem.iconPath = new vscode.ThemeIcon('question');
+    treeItem.iconPath = new vscode.ThemeIcon(DEFAULT_SOURCE_ICON);
     treeItem.contextValue = 'dependency.unresolved';
     return treeItem;
   }
@@ -59,10 +67,14 @@ export class BundlerTreeDataProvider implements vscode.TreeDataProvider<BundlerT
       ? vscode.TreeItemCollapsibleState.Collapsed
       : vscode.TreeItemCollapsibleState.None);
     treeItem.description = spec.version;
-    treeItem.iconPath = new vscode.ThemeIcon('package');
+    treeItem.iconPath = this.specIcon(spec);
     treeItem.contextValue = 'dependency.resolved';
     treeItem.tooltip = spec.summary;
     return treeItem;
+  }
+
+  private specIcon(spec: BundlerSpec): vscode.ThemeIcon {
+    return new vscode.ThemeIcon(SOURCE_ICONS[spec.source] ?? DEFAULT_SOURCE_ICON);
   }
 
   private definitionTreeItem(definition: BundlerDefinition): vscode.TreeItem {
