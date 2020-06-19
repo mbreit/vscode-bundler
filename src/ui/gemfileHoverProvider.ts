@@ -66,7 +66,7 @@ class GemfileHoverProvider implements vscode.HoverProvider {
   }
 
   private markdownCommand(label: string, command: string, args: object): string {
-    return `[${label}](command:${command}?${encodeURIComponent(JSON.stringify(args))})`;
+    return `[${label}](command:${command}?${encodeURIComponent(JSON.stringify(args))} "${label}")`;
   }
 
   private markdownActions(spec: BundlerSpec): vscode.MarkdownString {
