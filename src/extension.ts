@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { BundlerProvider } from './bundler/bundlerProvider';
 import { createBundlerTreeview } from './ui/bundlerTree/bundlerTreeView';
 import { registerDefinitionErrorNotifications } from './ui/definitionErrorNotifications';
-import { registerCommands } from './ui/commands';
+import { registerCommands } from './ui/registerCommands';
 import { registerGemfileHoverProvider } from './ui/gemfileHoverProvider';
 
 // this method is called when your extension is activated
