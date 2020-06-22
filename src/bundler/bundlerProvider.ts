@@ -82,10 +82,12 @@ export class BundlerProvider {
   }
 
   private async loadFile(gemfileOrLockfile: vscode.Uri): Promise<void> {
+    // Ignore Uris other than local file URIs such as git://... when visiting the HEAD version of
+    // the Gemfile
+    if (gemfileOrLockfile.scheme !== 'file') return;
+
     const gemfile = await this.findGemfile(gemfileOrLockfile);
-    if (gemfile === undefined) {
-      return;
-    }
+    if (gemfile === undefined) return;
 
     const dir = gemfile.with({
       path: path.dirname(gemfile.path),
