@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.0.6](https://github.com/mbreit/vscode-bundler/compare/v0.0.5...v0.0.6) (2020-06-22)
+
+
+### Features
+
+* different icons in dependency tree depending on the source type ([56565f0](https://github.com/mbreit/vscode-bundler/commit/56565f0fd71345ec98f074fa09f935656b3f2020))
+
+
+### Bug Fixes
+
+* ignore non local file URIs for Gemfiles ([2ab6c32](https://github.com/mbreit/vscode-bundler/commit/2ab6c320f792cca48ffc36d851f14e8f71058ece))
+* remove tooltips with command uris from Gemfile hovers ([e9f5880](https://github.com/mbreit/vscode-bundler/commit/e9f5880cfc1be94c6a52c1583e769db58e75b380))
+
 ## [0.0.5](https://github.com/mbreit/vscode-bundler/compare/v0.0.4...v0.0.5) (2020-06-14)
 
 
